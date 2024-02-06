@@ -44,7 +44,16 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
                                 dcc.RangeSlider(id='payload-slider',
                                                 min=0, max=10000, step=1000,
                                                 marks={0: '0',
-                                                       100: '100'},
+                                                       1000: '1000',
+                                                       2000: '2000',
+                                                       3000: '3000',
+                                                       4000: '4000',
+                                                       5000: '5000',
+                                                       6000: '6000',
+                                                       7000: '7000',
+                                                       8000: '8000',
+                                                       9000: '9000',
+                                                       10000: '10000'},
                                                 value=[min_payload , max_payload]),
 
                                 # TASK 4: Add a scatter chart to show the correlation between payload and launch success
@@ -79,7 +88,10 @@ def get_pie_chart(entered_site):
 def get_scatter_chart(entered_site, payload_range):
     print('Params: {} {}'.format(entered_site, payload_range))
     if entered_site == 'ALL':
-        fig = px.scatter(spacex_df, x='Payload Mass (kg)', y='class', color='Booster Version Category')
+        filtered_df = spacex_df[(spacex_df['Payload Mass (kg)'] >= int(payload_range[0])) &
+                                (spacex_df['Payload Mass (kg)'] <= int(payload_range[1]))
+                               ]
+        fig = px.scatter(filtered_df, x='Payload Mass (kg)', y='class', color='Booster Version Category')
     else:
         filtered_df = spacex_df[(spacex_df['Launch Site'] == entered_site) & 
                                 (spacex_df['Payload Mass (kg)'] >= int(payload_range[0])) &
